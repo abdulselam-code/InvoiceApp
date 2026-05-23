@@ -19,7 +19,13 @@ namespace InvoiceApp.Pages.Invoices
 
         public int InvoiceId { get; set; }
 
-        public IActionResult OnGet(int id)
+        public string Mode { get; set; } = "edit";
+
+        public bool IsDetailsMode => Mode == "details";
+        public bool IsEditMode => Mode == "edit";
+        public bool IsDeleteMode => Mode == "delete";
+
+        public IActionResult OnGet(int id, string mode = "edit")
         {
             var invoice = _context.Invoices.Find(id);
 
@@ -28,6 +34,12 @@ namespace InvoiceApp.Pages.Invoices
                 return RedirectToPage("/Invoices/Index");
             }
 
+            if (mode != "edit" && mode != "details" && mode != "delete")
+            {
+                mode = "edit";
+            }
+
+            Mode = mode;
             InvoiceId = invoice.Id;
 
             InvoiceDto.Number = invoice.Number;
@@ -45,7 +57,7 @@ namespace InvoiceApp.Pages.Invoices
             return Page();
         }
 
-        public IActionResult OnPost(int id)
+        public IActionResult OnPost(int id, string mode)
         {
             var invoice = _context.Invoices.Find(id);
 
@@ -54,8 +66,17 @@ namespace InvoiceApp.Pages.Invoices
                 return RedirectToPage("/Invoices/Index");
             }
 
+            if (mode == "delete")
+            {
+                _context.Invoices.Remove(invoice);
+                _context.SaveChanges();
+
+                return RedirectToPage("/Invoices/Index");
+            }
+
             if (!ModelState.IsValid)
             {
+                Mode = mode;
                 InvoiceId = id;
                 return Page();
             }

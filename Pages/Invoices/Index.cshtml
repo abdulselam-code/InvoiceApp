@@ -140,9 +140,26 @@
                         <td>@invoice.IssueDate?.ToString("dd.MM.yyyy")</td>
                         <td>@invoice.DueDate?.ToString("dd.MM.yyyy")</td>
                         <td class="text-end" style="white-space:nowrap">
-                            <a class="btn btn-outline-secondary btn-sm" asp-page="/Invoices/Details" asp-route-id="@invoice.Id">Details</a>
-                            <a class="btn btn-outline-primary btn-sm" asp-page="/Invoices/Edit" asp-route-id="@invoice.Id">Edit</a>
-                            <a class="btn btn-outline-danger btn-sm" asp-page="/Invoices/Delete" asp-route-id="@invoice.Id">Delete</a>
+                            <a class="btn btn-outline-secondary btn-sm"
+                               asp-page="/Invoices/Edit"
+                               asp-route-id="@invoice.Id"
+                               asp-route-mode="details">
+                                Details
+                            </a>
+
+                            <a class="btn btn-outline-primary btn-sm"
+                               asp-page="/Invoices/Edit"
+                               asp-route-id="@invoice.Id"
+                               asp-route-mode="edit">
+                                Edit
+                            </a>
+
+                            <a class="btn btn-outline-danger btn-sm"
+                               asp-page="/Invoices/Edit"
+                               asp-route-id="@invoice.Id"
+                               asp-route-mode="delete">
+                                Delete
+                            </a>
                         </td>
                     </tr>
                 }

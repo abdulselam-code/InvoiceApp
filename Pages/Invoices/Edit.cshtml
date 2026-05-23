@@ -1,43 +1,76 @@
 ﻿@page "{id:int}"
 @model InvoiceApp.Pages.Invoices.EditModel
 
-<h2 class="text-center mb-3">Edit Invoice</h2>
+@{
+    var pageTitle = Model.IsDetailsMode
+        ? "Invoice Details"
+        : Model.IsDeleteMode
+            ? "Delete Invoice"
+            : "Edit Invoice";
 
-<form method="post">
+    var isReadOnly = Model.IsDetailsMode || Model.IsDeleteMode;
+}
+
+<h2 class="text-center mb-3">@pageTitle</h2>
+
+@if (Model.IsDetailsMode)
+{
+    <div class="alert alert-info">
+        You are viewing this invoice in details mode. Fields cannot be changed.
+    </div>
+}
+else if (Model.IsDeleteMode)
+{
+    <div class="alert alert-warning">
+        Please review the invoice information before deleting this record.
+    </div>
+}
+
+<form method="post"
+      asp-route-id="@Model.InvoiceId"
+      asp-route-mode="@Model.Mode">
+
     <div class="row g-2 mb-3">
         <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header">Invoice Details</div>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white fw-semibold">Invoice Details</div>
                 <div class="card-body">
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Invoice Number</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.Number" />
+                            <input class="form-control" asp-for="InvoiceDto.Number" readonly="@isReadOnly" />
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Status</label>
                         <div class="col-sm-8">
-                            <select class="form-select" asp-for="InvoiceDto.Status">
-                                <option value="Pending">Pending</option>
-                                <option value="Paid">Paid</option>
-                            </select>
+                            @if (isReadOnly)
+                            {
+                                <input class="form-control" asp-for="InvoiceDto.Status" readonly />
+                            }
+                            else
+                            {
+                                <select class="form-select" asp-for="InvoiceDto.Status">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Paid">Paid</option>
+                                </select>
+                            }
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Issue Date</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.IssueDate" type="date" />
+                            <input class="form-control" asp-for="InvoiceDto.IssueDate" type="date" readonly="@isReadOnly" />
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Due Date</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.DueDate" type="date" />
+                            <input class="form-control" asp-for="InvoiceDto.DueDate" type="date" readonly="@isReadOnly" />
                         </div>
                     </div>
 
@@ -46,35 +79,35 @@
         </div>
 
         <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header">Client Details</div>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white fw-semibold">Client Details</div>
                 <div class="card-body">
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Client Name</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.ClientName" />
+                            <input class="form-control" asp-for="InvoiceDto.ClientName" readonly="@isReadOnly" />
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Email</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.Email" />
+                            <input class="form-control" asp-for="InvoiceDto.Email" readonly="@isReadOnly" />
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Phone</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.Phone" />
+                            <input class="form-control" asp-for="InvoiceDto.Phone" readonly="@isReadOnly" />
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Address</label>
                         <div class="col-sm-8">
-                            <input class="form-control" asp-for="InvoiceDto.Address" />
+                            <input class="form-control" asp-for="InvoiceDto.Address" readonly="@isReadOnly" />
                         </div>
                     </div>
 
@@ -83,23 +116,23 @@
         </div>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-header">Service Details</div>
+    <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-header bg-white fw-semibold">Service Details</div>
         <div class="card-body">
             <div class="row g-2">
                 <div class="col-lg-4 col-sm-6">
                     <label class="form-label">Service</label>
-                    <input class="form-control" asp-for="InvoiceDto.Service" />
+                    <input class="form-control" asp-for="InvoiceDto.Service" readonly="@isReadOnly" />
                 </div>
 
                 <div class="col-lg-2 col-sm-4">
                     <label class="form-label">Unit Price</label>
-                    <input class="form-control" asp-for="InvoiceDto.UnitPrice" id="unitPriceInput" oninput="updateTotalPrice()" />
+                    <input class="form-control" asp-for="InvoiceDto.UnitPrice" id="unitPriceInput" readonly="@isReadOnly" oninput="updateTotalPrice()" />
                 </div>
 
                 <div class="col-lg-2 col-sm-4">
                     <label class="form-label">Quantity</label>
-                    <input class="form-control" asp-for="InvoiceDto.Quantity" id="quantityInput" oninput="updateTotalPrice()" />
+                    <input class="form-control" asp-for="InvoiceDto.Quantity" id="quantityInput" readonly="@isReadOnly" oninput="updateTotalPrice()" />
                 </div>
 
                 <div class="col-lg-2 col-sm-4">
@@ -110,8 +143,67 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary me-2">Save</button>
-    <a class="btn btn-outline-primary" asp-page="/Invoices/Index" role="button">Cancel</a>
+    @if (Model.IsEditMode)
+    {
+        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+        <a class="btn btn-outline-secondary" asp-page="/Invoices/Index">Cancel</a>
+    }
+    else if (Model.IsDetailsMode)
+    {
+        <a class="btn btn-primary me-2"
+           asp-page="/Invoices/Edit"
+           asp-route-id="@Model.InvoiceId"
+           asp-route-mode="edit">
+            Edit This Invoice
+        </a>
+
+        <a class="btn btn-outline-secondary" asp-page="/Invoices/Index">Back</a>
+    }
+    else if (Model.IsDeleteMode)
+    {
+        <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete Invoice
+        </button>
+
+        <a class="btn btn-outline-secondary" asp-page="/Invoices/Index">Cancel</a>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p class="mb-2">Are you sure you want to delete this invoice?</p>
+
+                        <div class="border rounded p-3 bg-light">
+                            <p class="mb-1"><strong>Invoice Number:</strong> @Model.InvoiceDto.Number</p>
+                            <p class="mb-1"><strong>Client:</strong> @Model.InvoiceDto.ClientName</p>
+                            <p class="mb-0"><strong>Total:</strong> <span id="modalTotalPrice"></span></p>
+                        </div>
+
+                        <p class="text-muted mt-3 mb-0">
+                            This action cannot be undone.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            No, Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-danger">
+                            Yes, Delete
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
 </form>
 
 <script>
@@ -119,11 +211,17 @@
         let quantity = parseFloat(document.getElementById("quantityInput").value.replace(",", "."));
         let unitPrice = parseFloat(document.getElementById("unitPriceInput").value.replace(",", "."));
 
-        if (isNaN(quantity) || isNaN(unitPrice)) {
-            document.getElementById("totalPriceInput").value = "0";
-        } else {
-            let totalPrice = quantity * unitPrice;
-            document.getElementById("totalPriceInput").value = totalPrice;
+        let totalPrice = 0;
+
+        if (!isNaN(quantity) && !isNaN(unitPrice)) {
+            totalPrice = quantity * unitPrice;
+        }
+
+        document.getElementById("totalPriceInput").value = totalPrice.toFixed(2);
+
+        let modalTotal = document.getElementById("modalTotalPrice");
+        if (modalTotal) {
+            modalTotal.innerText = totalPrice.toFixed(2) + " $";
         }
     }
 
