@@ -1,10 +1,211 @@
 ﻿@page
 @model IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+
+    <div class="p-5 mb-5 rounded-4 shadow-sm border bg-light">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-primary mb-3 px-3 py-2">
+                    ASP.NET Core Razor Pages Project
+                </span>
+
+                <h1 class="display-4 fw-bold mb-3">
+                    Invoice Management System
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    A modern invoice management application developed with
+                    ASP.NET Core Razor Pages, Entity Framework Core and Microsoft SQL Server.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-primary btn-lg px-4" asp-page="/Invoices/Index">
+                        View Invoices
+                    </a>
+
+                    <a class="btn btn-outline-dark btn-lg px-4" asp-page="/Invoices/Create">
+                        Create Invoice
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 mt-4 mt-lg-0">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3">Project Overview</h4>
+
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span class="text-muted">Framework</span>
+                            <strong>ASP.NET Core</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span class="text-muted">Page Type</span>
+                            <strong>Razor Pages</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span class="text-muted">Database</span>
+                            <strong>SQL Server</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span class="text-muted">ORM</span>
+                            <strong>EF Core</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-2">
+                            <span class="text-muted">Module</span>
+                            <strong>Invoice CRUD</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clickable Feature Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <a asp-page="/Invoices/Index" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm rounded-4 feature-card">
+                    <div class="card-body p-4">
+                        <div class="fs-2 mb-2">📄</div>
+                        <h5 class="fw-bold">Invoice Listing</h5>
+                        <p class="text-muted mb-0">
+                            View all invoice records with client, service, payment and date information.
+                        </p>
+                        <span class="small text-primary fw-semibold d-inline-block mt-3">
+                            Open invoice list →
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-page="/Invoices/Create" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm rounded-4 feature-card">
+                    <div class="card-body p-4">
+                        <div class="fs-2 mb-2">➕</div>
+                        <h5 class="fw-bold">Create Invoice</h5>
+                        <p class="text-muted mb-0">
+                            Add a new invoice by entering customer, service, price and date details.
+                        </p>
+                        <span class="small text-primary fw-semibold d-inline-block mt-3">
+                            Create new invoice →
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-page="/Invoices/Index" asp-route-statusFilter="Paid" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm rounded-4 feature-card">
+                    <div class="card-body p-4">
+                        <div class="fs-2 mb-2">💰</div>
+                        <h5 class="fw-bold">Paid Invoices</h5>
+                        <p class="text-muted mb-0">
+                            Quickly access paid invoice records and review completed payments.
+                        </p>
+                        <span class="small text-success fw-semibold d-inline-block mt-3">
+                            View paid invoices →
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-page="/Invoices/Index" asp-route-statusFilter="Pending" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm rounded-4 feature-card">
+                    <div class="card-body p-4">
+                        <div class="fs-2 mb-2">⏳</div>
+                        <h5 class="fw-bold">Pending Invoices</h5>
+                        <p class="text-muted mb-0">
+                            Track pending invoices and follow payment records that are not completed yet.
+                        </p>
+                        <span class="small text-warning fw-semibold d-inline-block mt-3">
+                            View pending invoices →
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">About This Project</h4>
+
+                    <p class="text-muted">
+                        This project was developed as a database-connected web application.
+                        The application uses Entity Framework Core to communicate with SQL Server.
+                        The database table was created with migration, and invoice records are managed
+                        through Razor Pages.
+                    </p>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-4">
+                            <div class="border rounded-3 p-3 h-100">
+                                <strong>Model</strong>
+                                <p class="text-muted mb-0 small">Invoice and InvoiceDto classes</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="border rounded-3 p-3 h-100">
+                                <strong>DbContext</strong>
+                                <p class="text-muted mb-0 small">ApplicationDbContext service</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="border rounded-3 p-3 h-100">
+                                <strong>Pages</strong>
+                                <p class="text-muted mb-0 small">Index, Create, Edit, Details, Delete</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Quick Actions</h4>
+
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-primary" asp-page="/Invoices/Index">
+                            Open Invoice Panel
+                        </a>
+
+                        <a class="btn btn-outline-primary" asp-page="/Invoices/Create">
+                            Add New Invoice
+                        </a>
+
+                        <a class="btn btn-outline-secondary" asp-page="/Privacy">
+                            Privacy Page
+                        </a>
+                    </div>
+
+                    <hr />
+
+                    <p class="text-muted small mb-0">
+                        This home page summarizes the technologies and main features used in the project.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -32,11 +32,13 @@ namespace InvoiceApp.Pages.Invoices
         {
             var invoice = _context.Invoices.Find(id);
 
-            if (invoice != null)
+            if (invoice == null)
             {
-                _context.Invoices.Remove(invoice);
-                _context.SaveChanges();
+                return RedirectToPage("/Invoices/Index");
             }
+
+            _context.Invoices.Remove(invoice);
+            _context.SaveChanges();
 
             return RedirectToPage("/Invoices/Index");
         }
