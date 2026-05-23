@@ -3,11 +3,18 @@
 
 <h2 class="text-center mb-3">Create Invoice</h2>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        Please check the form. At least one invoice item is required.
+    </div>
+}
+
 <form method="post">
     <div class="row g-2 mb-3">
         <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header">Invoice Details</div>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white fw-semibold">Invoice Details</div>
                 <div class="card-body">
 
                     <div class="row mb-3">
@@ -46,8 +53,8 @@
         </div>
 
         <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header">Client Details</div>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white fw-semibold">Client Details</div>
                 <div class="card-body">
 
                     <div class="row mb-3">
@@ -83,49 +90,162 @@
         </div>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-header">Service Details</div>
+    <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">Invoice Items</span>
+
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addItemRow()">
+                + Add Item
+            </button>
+        </div>
+
         <div class="card-body">
-            <div class="row g-2">
-                <div class="col-lg-4 col-sm-6">
-                    <label class="form-label">Service</label>
-                    <input class="form-control" asp-for="InvoiceDto.Service" />
-                </div>
+            <div class="table-responsive">
+                <table class="table align-middle" id="itemsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40%">Service</th>
+                            <th style="width: 20%">Unit Price</th>
+                            <th style="width: 15%">Quantity</th>
+                            <th style="width: 15%">Total</th>
+                            <th style="width: 10%"></th>
+                        </tr>
+                    </thead>
 
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Unit Price</label>
-                    <input class="form-control" asp-for="InvoiceDto.UnitPrice" id="unitPriceInput" oninput="updateTotalPrice()" />
-                </div>
+                    <tbody id="itemsBody">
+                        @for (int i = 0; i < Model.InvoiceDto.Items.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input class="form-control"
+                                           name="InvoiceDto.Items[@i].Service"
+                                           value="@Model.InvoiceDto.Items[i].Service" />
+                                </td>
 
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Quantity</label>
-                    <input class="form-control" asp-for="InvoiceDto.Quantity" id="quantityInput" oninput="updateTotalPrice()" />
-                </div>
+                                <td>
+                                    <input class="form-control unit-price"
+                                           name="InvoiceDto.Items[@i].UnitPrice"
+                                           value="@Model.InvoiceDto.Items[i].UnitPrice"
+                                           oninput="updateTotals()" />
+                                </td>
 
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Total Price</label>
-                    <input class="form-control" disabled id="totalPriceInput" />
-                </div>
+                                <td>
+                                    <input class="form-control quantity"
+                                           name="InvoiceDto.Items[@i].Quantity"
+                                           value="@Model.InvoiceDto.Items[i].Quantity"
+                                           oninput="updateTotals()" />
+                                </td>
+
+                                <td>
+                                    <input class="form-control row-total" disabled />
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeItemRow(this)">
+                                        Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end fw-bold">Grand Total</td>
+                            <td>
+                                <input class="form-control fw-bold" id="grandTotalInput" disabled />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
 
     <button type="submit" class="btn btn-primary me-2">Create</button>
-    <a class="btn btn-outline-primary" asp-page="/Invoices/Index" role="button">Cancel</a>
+    <a class="btn btn-outline-secondary" asp-page="/Invoices/Index" role="button">Cancel</a>
 </form>
 
 <script>
-    function updateTotalPrice() {
-        let quantity = document.getElementById("quantityInput").value;
-        let unitPrice = parseFloat(document.getElementById("unitPriceInput").value.replace(",", "."));
+    let itemIndex = @Model.InvoiceDto.Items.Count;
 
-        if (isNaN(quantity) || isNaN(unitPrice)) {
-            document.getElementById("totalPriceInput").value = "0";
-        } else {
-            let totalPrice = quantity * unitPrice;
-            document.getElementById("totalPriceInput").value = totalPrice;
-        }
+    function addItemRow() {
+        const tbody = document.getElementById("itemsBody");
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>
+                <input class="form-control"
+                       name="InvoiceDto.Items[${itemIndex}].Service" />
+            </td>
+
+            <td>
+                <input class="form-control unit-price"
+                       name="InvoiceDto.Items[${itemIndex}].UnitPrice"
+                       value="0"
+                       oninput="updateTotals()" />
+            </td>
+
+            <td>
+                <input class="form-control quantity"
+                       name="InvoiceDto.Items[${itemIndex}].Quantity"
+                       value="1"
+                       oninput="updateTotals()" />
+            </td>
+
+            <td>
+                <input class="form-control row-total" disabled />
+            </td>
+
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeItemRow(this)">
+                    Remove
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+        itemIndex++;
+        updateTotals();
     }
 
-    updateTotalPrice();
+    function removeItemRow(button) {
+        const tbody = document.getElementById("itemsBody");
+
+        if (tbody.rows.length <= 1) {
+            alert("At least one invoice item is required.");
+            return;
+        }
+
+        button.closest("tr").remove();
+        updateTotals();
+    }
+
+    function parseNumber(value) {
+        return parseFloat((value || "0").toString().replace(",", "."));
+    }
+
+    function updateTotals() {
+        let grandTotal = 0;
+
+        document.querySelectorAll("#itemsBody tr").forEach(row => {
+            const unitPrice = parseNumber(row.querySelector(".unit-price").value);
+            const quantity = parseNumber(row.querySelector(".quantity").value);
+
+            let rowTotal = 0;
+
+            if (!isNaN(unitPrice) && !isNaN(quantity)) {
+                rowTotal = unitPrice * quantity;
+            }
+
+            row.querySelector(".row-total").value = rowTotal.toFixed(2);
+            grandTotal += rowTotal;
+        });
+
+        document.getElementById("grandTotalInput").value = grandTotal.toFixed(2);
+    }
+
+    updateTotals();
 </script>
