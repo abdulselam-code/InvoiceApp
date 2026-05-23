@@ -1,0 +1,29 @@
+﻿@page "{id:int}"
+@model InvoiceApp.Pages.Invoices.DetailsModel
+
+<h2 class="text-center mb-3">Invoice Details</h2>
+
+@if (Model.Invoice != null)
+{
+    <div class="card">
+        <div class="card-header">
+            Invoice @Model.Invoice.Number
+        </div>
+        <div class="card-body">
+            <p><strong>Status:</strong> @Model.Invoice.Status</p>
+            <p><strong>Client:</strong> @Model.Invoice.ClientName</p>
+            <p><strong>Email:</strong> @Model.Invoice.Email</p>
+            <p><strong>Phone:</strong> @Model.Invoice.Phone</p>
+            <p><strong>Address:</strong> @Model.Invoice.Address</p>
+            <p><strong>Service:</strong> @Model.Invoice.Service</p>
+            <p><strong>Unit Price:</strong> @Model.Invoice.UnitPrice</p>
+            <p><strong>Quantity:</strong> @Model.Invoice.Quantity</p>
+            <p><strong>Total:</strong> @(Model.Invoice.UnitPrice * Model.Invoice.Quantity)</p>
+            <p><strong>Issue Date:</strong> @Model.Invoice.IssueDate</p>
+            <p><strong>Due Date:</strong> @Model.Invoice.DueDate</p>
+        </div>
+    </div>
+
+    <a class="btn btn-primary mt-3" asp-page="/Invoices/Edit" asp-route-id="@Model.Invoice.Id">Edit</a>
+    <a class="btn btn-outline-secondary mt-3" asp-page="/Invoices/Index">Back</a>
+}

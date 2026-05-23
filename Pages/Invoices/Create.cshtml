@@ -1,0 +1,131 @@
+﻿@page
+@model InvoiceApp.Pages.Invoices.CreateModel
+
+<h2 class="text-center mb-3">Create Invoice</h2>
+
+<form method="post">
+    <div class="row g-2 mb-3">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Invoice Details</div>
+                <div class="card-body">
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Invoice Number</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.Number" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Status</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" asp-for="InvoiceDto.Status">
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Issue Date</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.IssueDate" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Due Date</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.DueDate" type="date" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Client Details</div>
+                <div class="card-body">
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Client Name</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.ClientName" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Email</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.Email" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Phone</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.Phone" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Address</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" asp-for="InvoiceDto.Address" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Service Details</div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-lg-4 col-sm-6">
+                    <label class="form-label">Service</label>
+                    <input class="form-control" asp-for="InvoiceDto.Service" />
+                </div>
+
+                <div class="col-lg-2 col-sm-4">
+                    <label class="form-label">Unit Price</label>
+                    <input class="form-control" asp-for="InvoiceDto.UnitPrice" id="unitPriceInput" oninput="updateTotalPrice()" />
+                </div>
+
+                <div class="col-lg-2 col-sm-4">
+                    <label class="form-label">Quantity</label>
+                    <input class="form-control" asp-for="InvoiceDto.Quantity" id="quantityInput" oninput="updateTotalPrice()" />
+                </div>
+
+                <div class="col-lg-2 col-sm-4">
+                    <label class="form-label">Total Price</label>
+                    <input class="form-control" disabled id="totalPriceInput" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Create</button>
+    <a class="btn btn-outline-primary" asp-page="/Invoices/Index" role="button">Cancel</a>
+</form>
+
+<script>
+    function updateTotalPrice() {
+        let quantity = document.getElementById("quantityInput").value;
+        let unitPrice = parseFloat(document.getElementById("unitPriceInput").value.replace(",", "."));
+
+        if (isNaN(quantity) || isNaN(unitPrice)) {
+            document.getElementById("totalPriceInput").value = "0";
+        } else {
+            let totalPrice = quantity * unitPrice;
+            document.getElementById("totalPriceInput").value = totalPrice;
+        }
+    }
+
+    updateTotalPrice();
+</script>
