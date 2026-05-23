@@ -125,7 +125,10 @@
                                 <td>
                                     <input class="form-control unit-price"
                                            name="InvoiceDto.Items[@i].UnitPrice"
-                                           value="@Model.InvoiceDto.Items[i].UnitPrice"
+                                           value="@Model.InvoiceDto.Items[i].UnitPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
+                                           type="number"
+                                           step="0.01"
+                                           min="0"
                                            oninput="updateTotals()" />
                                 </td>
 
@@ -133,6 +136,9 @@
                                     <input class="form-control quantity"
                                            name="InvoiceDto.Items[@i].Quantity"
                                            value="@Model.InvoiceDto.Items[i].Quantity"
+                                           type="number"
+                                           step="1"
+                                           min="1"
                                            oninput="updateTotals()" />
                                 </td>
 
@@ -184,7 +190,10 @@
             <td>
                 <input class="form-control unit-price"
                        name="InvoiceDto.Items[${itemIndex}].UnitPrice"
-                       value="0"
+                       value="0.00"
+                       type="number"
+                       step="0.01"
+                       min="0"
                        oninput="updateTotals()" />
             </td>
 
@@ -192,6 +201,9 @@
                 <input class="form-control quantity"
                        name="InvoiceDto.Items[${itemIndex}].Quantity"
                        value="1"
+                       type="number"
+                       step="1"
+                       min="1"
                        oninput="updateTotals()" />
             </td>
 
