@@ -88,10 +88,3 @@ Hocanın istediği iyileştirmeler kapsamında aşağıdaki geliştirmeler yapı
 Solution dosyası gerekirse Visual Studio tarafından yeniden oluşturulabilir.  
 Proje `InvoiceApp.csproj` dosyası üzerinden açılabilir.
 
-## GitHub
-
-Proje GitHub bağlantısı:
-
-```text
-https://github.com/abdulselam-code/InvoiceApp
-```
